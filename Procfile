@@ -1,1 +1,1 @@
-web: sh -c 'streamlit run app.py --server.port ${PORT:-8501}'
+web: sh -c 'streamlit run main.py --server.port ${PORT:-8501}'

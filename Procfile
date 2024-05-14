@@ -1,1 +1,1 @@
-web: streamlit run app.py --server.port 80 --server.enableCORS true
+web: sh -c 'streamlit run main.py'

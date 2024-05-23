@@ -22,7 +22,7 @@ client = OpenAI()
 
 
 # == Hardcoded ids to be used once the first code run is done and the assistant was created
-thread_id = "thread_LrXOKLSwfQVXbC9zmt4PE4iZ"
+thread_id = "thread_gZPlA6hYW4PgAPZiEMmraSck"
 assis_id = "asst_URvtuzD3LVeo9AW0wD7okXB9"
 
 # # == Creating vector store for the uploaded file == #

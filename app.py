@@ -67,23 +67,23 @@ assis_id = "asst_URvtuzD3LVeo9AW0wD7okXB9"
 # # The thread now has a vector store with that file in its tool resources.
 # print(thread.tool_resources.file_search)
 # print(thread.id)
-message = "What is the secret word's first letter?"
+# message = "What is the secret word's first letter?"
 
-message = client.beta.threads.messages.create(
-    thread_id=thread_id, role="user", content=message
-)
+# message = client.beta.threads.messages.create(
+#     thread_id=thread_id, role="user", content=message
+# )
 
-run = client.beta.threads.runs.create_and_poll(
-    thread_id=thread_id, assistant_id=assis_id
-)
+# run = client.beta.threads.runs.create_and_poll(
+#     thread_id=thread_id, assistant_id=assis_id
+# )
 
-messages = list(client.beta.threads.messages.list(
-    thread_id=thread_id, run_id=run.id))
+# messages = list(client.beta.threads.messages.list(
+#     thread_id=thread_id, run_id=run.id))
 
-message_content = messages[0].content[0].text
+# message_content = messages[0].content[0].text
 
-print(message_content.value)
-print(type(message_content.value))
+# print(message_content.value)
+# print(type(message_content.value))
 
 # run = client.beta.threads.runs.create(
 #     thread_id=thread_id,

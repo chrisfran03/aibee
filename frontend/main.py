@@ -5,6 +5,7 @@ import time
 import streamlit as st
 from src.agents.report_generator import ReportGenerator
 from src.agents.decision_taker import DecisionTaker
+from src.agents.code_writer import CodeWriter
 
 google_api_key = os.getenv('GOOGLE_API_KEY')
 
@@ -40,10 +41,12 @@ def workspace_page():
     api_key = google_api_key
     selected_model = "Gemini-Pro"
 
+    #initializing agents
     decision_taker = DecisionTaker(selected_model, api_key)
     report_generator = ReportGenerator(selected_model, api_key)
-    
+    code_writer = CodeWriter(selected_model,api_key)
 
+    #splitting the screen for report area and code area
     col1, col2 = st.columns(2)
 
     with col2:
@@ -60,6 +63,7 @@ def workspace_page():
             with tab2:
                 code_area = st.container()
     
+    #user prompt
     prompt = st.chat_input(placeholder="Talk to assistant")
 
     with col1:
@@ -83,6 +87,7 @@ def workspace_page():
                 with st.spinner("Processing your prompt ..."):
                     response = decision_taker.execute(prompt)[0]
 
+                #Displaying messages for ordinary messages
                 if response["function"] == "ordinary_conversation":
                     st.chat_message("ai", avatar=assistant_icon).write_stream(
                         stream_text(response["reply"])
@@ -90,7 +95,9 @@ def workspace_page():
                     st.session_state.messages.append(
                         {"role": "ai", "content": response["reply"]}
                     )
-                elif response["function"] == "generate_report":
+
+                # Generating plan,report and code template if coding project is recognised
+                elif response["function"] == "coding_project":
                     st.chat_message("ai", avatar=assistant_icon).write_stream(stream_text("Generating report for your project"))
                     st.session_state.messages.append({"role":"ai","content":"Generating report for your project",})
                     time.sleep(0.002) 
@@ -110,11 +117,37 @@ def workspace_page():
                         st.write_stream(stream_text(plan_and_summary.replace("[ ]", "")))
 
                     report_generator.generate_report(generated_report,project_name)
+
+                    with st.spinner("Generating the code ..."):
+                        coder_output = code_writer.execute(
+                            generated_report[
+                                generated_report.index("Plan"): generated_report.index(
+                                    "Summary"
+                                )
+                            ],
+                            prompt,
+                        )
+
+                    with st.spinner("Generating code..."):
+                        with code_area:
+                            for item in coder_output:
+                                st.write_stream(
+                                    stream_text(f"File name: {item['file']}")
+                                )
+                                st.write_stream(stream_text(item["code"]))
+
+                    st.chat_message("ai", avatar=assistant_icon).write_stream(
+                        stream_text(
+                            f"I finished generating the code template for `{project_name}`. Check out the `Code Template` tab"
+                        )
+                    )
+                    st.session_state.messages.append(
+                        {
+                            "role": "ai",
+                            "content": f"I finished generating the code template for `{project_name}`. Check out the `Code Template` tab",
+                        }
+                    )
                     
-
-                
-
-
 
 
 if __name__ == "__main__":

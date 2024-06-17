@@ -22,7 +22,7 @@ Usage:
 ```
 
 ## `coding_project`
-Description: The user's request is to create a coding project. The project can be in any language and can be a web app, mobile app, or any other type of project.
+Description: The user's request is to create a coding project. This also includes requests to create a document for the following: Report, Documentation, Project Technical Document, Workshop Material, Homework, Assignment, or any other document. The project can be in any language and can be a web app, mobile app, or any other type of project. 
 Usage:
 ```
 {
@@ -51,14 +51,14 @@ Response Format:
 ```
 [
     {
-        "function": "git_clone",
+        "function": "coding_project",
         "args": {
-            "url": "https://github.com/username/repo"
+        "user_prompt": "<Write the user's prompt but even more verbose and detailed>"
         },
         "reply": "<Inform the user what you're doing here in a human-like response>"
     },
     {
-        "function": "generate_pdf_document",
+        "function": "generate_report",
         "args": {
             "user_prompt": "I want to create a report on the project"
         },

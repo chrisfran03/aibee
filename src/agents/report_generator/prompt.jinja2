@@ -5,32 +5,30 @@ The user asked: {{ prompt }}
 Based on the user's request, create a report/documentation for the project identified. Follow this format for your response:
 
 ```
-Project Name: <Write an apt project name with no longer than 5 words>
+# Project Name: <Write an apt project name with no longer than 5 words>
 
-Your Reply to the Human Prompter: <short human-like response to the prompt stating how you're creating the plan, do not start with "As an AI".>
+# Abstract: <This is the abstract text. You can write some sentences about the final product and why you decide to work on this project. You can briefly mention relevant info related to project.>
 
-Abstract: <This is the abstract text. You can write some sentences about the final product and why you decide to work on this project. You can briefly mention relevant info related to project.>
+# Current Focus: Briefly state the main objective or focus area for the plan.
 
-Current Focus: Briefly state the main objective or focus area for the plan.
-
-Introduction: <This is an intro text. It is a longer version of the abstract where you can start telling your story to guide the reader through the proposal. You can add some examples to elaborate your motivation of doing this project.
+# Introduction: <This is an intro text. It is a longer version of the abstract where you can start telling your story to guide the reader through the proposal. You can add some examples to elaborate your motivation of doing this project.
 What do you want to achieve at the end? Does it affect anyone, users/players?>
 
-Literature review: <The ultimate purpose of this is to give reader the better picture of what is going on around the problem you wanna solve. You will sumarize different articles, or provide some survery, and then highlight what is the interesting areas that worth investigation.>
+# Literature review: <The ultimate purpose of this is to give reader the better picture of what is going on around the problem you wanna solve. You will sumarize different articles, or provide some survery, and then highlight what is the interesting areas that worth investigation.>
 
-Problem definition: <Based on the previous review, we can see that  the function abc is quite interesting but is not fully utilised. My questions is How can I .>
+# Problem definition: <Based on the previous review, we can see that  the function abc is quite interesting but is not fully utilised. My questions is How can I .>
 
-Possible solutions/Research methods: <List all the possible technologies/frameworks/languages that you could use to approach this problem or create the application. What are the pros and cons of this.>
+# Possible solutions/Research methods: <List all the possible technologies/frameworks/languages that you could use to approach this problem or create the application. What are the pros and cons of this.>
 
-Features and Functionalities: <List of the proposed features of the planned app>
+# Features and Functionalities: <List of the proposed features of the planned app>
 
-Plan:
+# Plan:
 - [ ] Step 1: Describe the first action item needed to progress towards the objective.
 - [ ] Step 2: Describe the second action item needed to progress towards the objective.
 ...
 - [ ] Step N: Describe the final action item needed to complete the objective.
 
-Summary: <Briefly summarize the plan, highlighting any key considerations, dependencies, or potential challenges.>
+# Summary: <Briefly summarize the plan, highlighting any key considerations, dependencies, or potential challenges.>
 ```
 
 Each step should be a clear, concise description of a specific task or action required. The plan should cover all necessary aspects of the user's request, from research and implementation to testing and reporting.
@@ -40,5 +38,7 @@ Write the plan with knowing that you have access to the browser and search engin
 After listing the steps, provide a brief summary of the plan, highlighting any key considerations, dependencies, or potential challenges.
 
 Remember to tailor the plan to the specific task requested by the user, and provide sufficient detail to guide the implementation process.
+
+Start a new line after the heading of every section.
 
 Your response should only be verbatim in the format inside the code block. Any other response format will be rejected.

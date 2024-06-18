@@ -26,17 +26,17 @@ class ReportGenerator:
         for line in response.split("\n"):
             line = line.strip()
 
-            if line.startswith("Project Name:"):
+            if line.startswith("# Project Name:"):
                 current_section = "project"
                 result["project"] = line.split(":", 1)[1].strip()
             elif line.startswith("Your Reply to the Human Prompter:"):
                 reply = line.split(":", 1)[1].strip()
-            elif line.startswith("Current Focus:"):
+            elif line.startswith("# Current Focus:"):
                 current_section = "focus"
                 result["focus"] = line.split(":", 1)[1].strip()
-            elif line.startswith("Plan:"):
+            elif line.startswith("# Plan:"):
                 current_section = "plans"
-            elif line.startswith("Summary:"):
+            elif line.startswith("# Summary:"):
                 current_section = "summary"
                 result["summary"] = line.split(":", 1)[1].strip()
             elif current_section == "reply":
@@ -67,14 +67,20 @@ class ReportGenerator:
     # Check if filename ends with .docx, if not, append it
         if not filename.endswith('.docx'):
             filename += '.docx'
-
-        # Create a new Document
+    
         doc = Document()
-        doc.add_heading('Report Template', level=1)
+        lines = response.split('\n')
 
-        # Add the response as a paragraph
-        doc.add_paragraph(response)
+        for line in lines:
+            if line.startswith('# '):  # Heading
+                # Remove '# ' and add as a heading
+                doc.add_heading(line[2:], level=1)
+            elif line.startswith('## '):  # Subheading
+                # Remove '## ' and add as a subheading
+                doc.add_heading(line[3:], level=2)
+            else:
+                # Add regular paragraph
+                doc.add_paragraph(line)
 
-        # Save the document
         doc.save(filename)
-        print(f'Report template created: {filename}')
+        print(f'DOCX file created: {filename}')

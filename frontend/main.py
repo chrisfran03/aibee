@@ -138,13 +138,13 @@ def workspace_page():
 
                     st.chat_message("ai", avatar=assistant_icon).write_stream(
                         stream_text(
-                            f"I finished generating the code template for `{project_name}`. Check out the `Code Template` tab"
+                            f"I finished generating the code template for {project_name}. Check out the Code Template tab"
                         )
                     )
                     st.session_state.messages.append(
                         {
                             "role": "ai",
-                            "content": f"I finished generating the code template for `{project_name}`. Check out the `Code Template` tab",
+                            "content": f"I finished generating the code template for {project_name}. Check out the Code Template tab",
                         }
                     )
                     

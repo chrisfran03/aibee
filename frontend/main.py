@@ -108,8 +108,8 @@ def workspace_page():
 
                     project_name = json_response["project"]
 
-                    st.chat_message("ai", avatar=assistant_icon).write_stream(stream_text(model_reply))
-                    st.session_state.messages.append({"role":"ai","content":model_reply})
+                    # st.chat_message("ai", avatar=assistant_icon).write_stream(stream_text(model_reply))
+                    # st.session_state.messages.append({"role":"ai","content":model_reply})
 
                     with report_area:
                         plan_and_summary = generated_report[generated_report.index("Plan"):-3]

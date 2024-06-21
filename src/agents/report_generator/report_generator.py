@@ -16,6 +16,8 @@ class ReportGenerator:
 
     def validate_response(self, response: str) -> bool:
         return True
+    
+    # Parsing the response to provide suitable output 
     def parse_response(self, response: str):
         result = {"project": "", "focus": "", "plans": {}, "summary": ""}
 

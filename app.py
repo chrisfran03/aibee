@@ -22,8 +22,8 @@ client = OpenAI()
 
 
 # == Hardcoded ids to be used once the first code run is done and the assistant was created
-thread_id = "thread_gZPlA6hYW4PgAPZiEMmraSck"
-assis_id = "asst_URvtuzD3LVeo9AW0wD7okXB9"
+thread_id = ""
+assis_id = ""
 
 # # == Creating vector store for the uploaded file == #
 # vector_store = client.beta.vector_stores.create(name="Random message")

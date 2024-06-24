@@ -2,6 +2,7 @@ import sys
 sys.path.append('D:/Yoobee/Year 3/CS302 Assessment 3/aibee')
 import os
 import time
+import re
 import streamlit as st
 from src.agents.report_generator import ReportGenerator
 from src.agents.decision_taker import DecisionTaker
@@ -22,11 +23,24 @@ with open("frontend/styles.css") as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
 
-# Initalized messages
+# Initalized messages, report content, and code content for managing state
 if "messages" not in st.session_state:
     st.session_state["messages"] = [
         {"role": "assistant", "content": "Hi, How can I help with your project?"}
     ]
+
+if 'report_generated' not in st.session_state:
+    st.session_state['report_generated'] = False
+    st.session_state['buffer'] = None
+    st.session_state['filename'] = None
+    st.session_state['project_name'] = None
+
+if 'report_area' not in st.session_state:
+    st.session_state['report_area'] = " "
+
+if 'code_area' not in st.session_state:
+    st.session_state['code_area'] = []
+
 
 def page_switcher(page):
     st.session_state.runpage = page
@@ -59,9 +73,19 @@ def workspace_page():
 
             with tab1:
                 report_area = st.container()
+                if st.session_state.filename:
+                    st.session_state.filename
+                    st.session_state.report_area
+                    st.download_button(
+                            label="Download Report Template",
+                            data=st.session_state['buffer'],
+                            file_name=st.session_state['filename'],
+                            mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                        )
 
             with tab2:
                 code_area = st.container()
+                st.session_state.code_area
     
     #user prompt
     prompt = st.chat_input(placeholder="Talk to assistant")
@@ -95,6 +119,7 @@ def workspace_page():
                     st.session_state.messages.append(
                         {"role": "ai", "content": response["reply"]}
                     )
+                    st.session_state.messages
 
                 # Generating plan,report and code template if coding project is recognised
                 elif response["function"] == "coding_project":
@@ -102,21 +127,36 @@ def workspace_page():
                     st.session_state.messages.append({"role":"ai","content":"Generating report for your project",})
                     time.sleep(0.002) 
 
+                    
                     with st.spinner("Generating report..."):
                         generated_report = report_generator.execute(prompt)
                         model_reply, json_response = report_generator.parse_response(generated_report)
-
-                    project_name = json_response["project"]
-
+                        project_name = json_response["project"]
+                        file_buffer, final_filename = report_generator.generate_report(generated_report, project_name)
+            
+                        st.session_state.report_generated = True
+                        st.session_state.buffer = file_buffer
+                        st.session_state.filename = final_filename
+                    
                     # st.chat_message("ai", avatar=assistant_icon).write_stream(stream_text(model_reply))
                     # st.session_state.messages.append({"role":"ai","content":model_reply})
 
                     with report_area:
                         plan_and_summary = generated_report[generated_report.index("Plan"):-3]
-                        st.write_stream(stream_text(f"Project name: {project_name}"))
-                        st.write_stream(stream_text(plan_and_summary.replace("[ ]", "")))
+                        st.session_state.report_area = plan_and_summary.replace("[ ]", "")
+                        st.session_state.project_name = f"Project name: {project_name}" 
+                        st.write_stream(stream_text(st.session_state.project_name))
+                        st.write_stream(stream_text(st.session_state.report_area))
+                        st.download_button(
+                            label="Download Report Template",
+                            data=st.session_state['buffer'],
+                            file_name=st.session_state['filename'],
+                            mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                        )
 
-                    report_generator.generate_report(generated_report,project_name)
+                    # report_generator.generate_report(generated_report,project_name)
+
+
 
                     with st.spinner("Generating the code ..."):
                         coder_output = code_writer.execute(
@@ -127,10 +167,11 @@ def workspace_page():
                             ],
                             prompt,
                         )
-
+                    
+                    st.session_state.code_area = coder_output
                     with st.spinner("Generating code..."):
                         with code_area:
-                            for item in coder_output:
+                            for item in st.session_state.code_area:
                                 st.write_stream(
                                     stream_text(f"File name: {item['file']}")
                                 )
@@ -147,6 +188,8 @@ def workspace_page():
                             "content": f"I finished generating the code template for {project_name}. Check out the Code Template tab",
                         }
                     )
+                    
+                    
                     
 
 

@@ -55,7 +55,7 @@ class CodeWriter:
     def execute(self, step_by_step_plan: str, user_prompt: str):
         prompt = self.render(step_by_step_plan,user_prompt)
         response = self.llm.inference(prompt)
-        print(response)
+
         valid_response = self.validate_response(response)
 
         while not valid_response:

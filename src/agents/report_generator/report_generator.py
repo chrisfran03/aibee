@@ -1,5 +1,6 @@
 from jinja2 import Environment, BaseLoader
 from docx import Document
+from io import BytesIO
 from src.llm import LLM
 
 report_generator_prompt = open("src/agents/report_generator/prompt.jinja2").read().strip()
@@ -65,24 +66,47 @@ class ReportGenerator:
         response = self.llm.inference(prompt)
         return response
     
+    # def generate_report(self, response, filename):
+    # # Check if filename ends with .docx, if not, append it
+    #     if not filename.endswith('.docx'):
+    #         filename += '.docx'
+    
+    #     doc = Document()
+    #     lines = response.split('\n')
+
+    #     for line in lines:
+    #         if line.startswith('# '):  # Heading
+    #             # Remove '# ' and add as a heading
+    #             doc.add_heading(line[2:], level=1)
+    #         elif line.startswith('## '):  # Subheading
+    #             # Remove '## ' and add as a subheading
+    #             doc.add_heading(line[3:], level=2)
+    #         else:
+    #             # Add regular paragraph
+    #             doc.add_paragraph(line)
+
+    #     doc.save(filename)
+    #     print(f'DOCX file created: {filename}')
     def generate_report(self, response, filename):
-    # Check if filename ends with .docx, if not, append it
+        # Check if filename ends with .docx, if not, append it
         if not filename.endswith('.docx'):
             filename += '.docx'
-    
+
         doc = Document()
         lines = response.split('\n')
 
         for line in lines:
             if line.startswith('# '):  # Heading
-                # Remove '# ' and add as a heading
                 doc.add_heading(line[2:], level=1)
             elif line.startswith('## '):  # Subheading
-                # Remove '## ' and add as a subheading
                 doc.add_heading(line[3:], level=2)
             else:
-                # Add regular paragraph
                 doc.add_paragraph(line)
 
-        doc.save(filename)
-        print(f'DOCX file created: {filename}')
+        # Save the document to an in-memory bytes buffer
+        buffer = BytesIO()
+        doc.save(buffer)
+        buffer.seek(0)  # Rewind the buffer to start
+
+        return buffer, filename
+

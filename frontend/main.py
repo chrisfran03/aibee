@@ -1,6 +1,9 @@
 import sys
-sys.path.append('D:/Yoobee/Year 3/CS302 Assessment 3/aibee')
 import os
+# sys.path.append('D:/Yoobee/Year 3/CS302 Assessment 3/aibee')
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)
+sys.path.append(parent_dir)
 import time
 import re
 import streamlit as st
@@ -119,7 +122,6 @@ def workspace_page():
                     st.session_state.messages.append(
                         {"role": "ai", "content": response["reply"]}
                     )
-                    st.session_state.messages
 
                 # Generating plan,report and code template if coding project is recognised
                 elif response["function"] == "coding_project":
